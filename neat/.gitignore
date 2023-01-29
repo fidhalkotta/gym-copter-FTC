@@ -1,0 +1,8 @@
+__pycache__
+
+gym_copter:Lander-v2/
+gym_copter:Lander-v3/
+
+models/
+visuals/
+runs/
