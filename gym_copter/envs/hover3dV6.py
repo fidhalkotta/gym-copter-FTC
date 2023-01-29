@@ -18,7 +18,7 @@ from gym_copter.sensors.vision.dvs import DVS
 class Hover3DV6(_Hover, _ThreeD):
 
     def __init__(self, obs_size=12):
-        _Hover.__init__(self, obs_size, 4)
+        _Hover.__init__(self, obs_size, 4, max_steps=20000)
         _ThreeD.__init__(self)
 
         # For generating CSV file
@@ -32,11 +32,9 @@ class Hover3DV6(_Hover, _ThreeD):
         return state
 
     def _get_reward(self, status, state, d, x, y):
-        position_sigma = 1
-        angle_sigma = np.pi / 20
+        position_sigma = 3
 
         position_amplitude = 1
-        angle_amplitude = 2
 
         target = 0, 0, -5
 

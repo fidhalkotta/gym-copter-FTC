@@ -6,7 +6,7 @@ import time
 
 print("Setting Names")
 
-project_name = f"gymCopter-Hover3DV5-PPO-{int(time.time())}"
+project_name = f"gymCopter-Hover3DV9-{int(time.time())}"
 models_dir = f"models/{project_name}"
 
 logdir = "logs"
@@ -19,12 +19,12 @@ if not os.path.exists(logdir):
 
 print("Setting up envs and models")
 
-env = gym.make("gym_copter:Hover3D-v5")
+env = gym.make("gym_copter:Hover3D-v9")
 env.reset()
 
 model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=logdir)
 
-TIMESTEPS = 50000
+TIMESTEPS = 200_000
 iters = 0
 
 print("Starting Training")

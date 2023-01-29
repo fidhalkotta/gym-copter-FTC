@@ -78,11 +78,39 @@ register(
     max_episode_steps=1000
 )
 
-# 3D hover V5: Gaussian reward based on distance.
+# 3D hover V5: Gaussian reward based on distance y offset
 register(
     id='Hover3D-v5',
     entry_point='gym_copter.envs:Hover3DV5',
     max_episode_steps=1000
+)
+
+# 3D hover V6: Just targeting z plane, increase time steps to 20,000 for Training
+register(
+    id='Hover3D-v6',
+    entry_point='gym_copter.envs:Hover3DV6',
+    max_episode_steps=20000
+)
+
+# 3D hover V7: Simple + 1 per frame alive. No Pitch or Roll Bounds
+register(
+    id='Hover3D-v7',
+    entry_point='gym_copter.envs:Hover3DV7',
+    max_episode_steps=20000
+)
+
+# 3D hover V8: More priority for z plane, some reward for x and y
+register(
+    id='Hover3D-v8',
+    entry_point='gym_copter.envs:Hover3DV8',
+    max_episode_steps=20000
+)
+
+# 3D hover V9: More priority for z plane, some reward for x and y, and phi and theta
+register(
+    id='Hover3D-v9',
+    entry_point='gym_copter.envs:Hover3DV9',
+    max_episode_steps=20000
 )
 
 

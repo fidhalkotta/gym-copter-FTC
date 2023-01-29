@@ -141,7 +141,7 @@ class ThreeDRenderer:
                  lim=50,
                  fps=50,
                  label=None,
-                 showtraj=False,
+                 showtraj=True,
                  viewangles=(30, 120),
                  outfile=None):
 

@@ -41,7 +41,7 @@ def _heuristic(env):
 def main():
 
     for _ in range(3):
-        env = gym.make("gym_copter:Hover3D-v4")
+        env = gym.make("gym_copter:Hover3D-v9")
 
         viewer = ThreeDHoverRenderer(env,
                           _heuristic,

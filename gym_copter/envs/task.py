@@ -34,8 +34,7 @@ class _Task(gym.Env, EzPickle):
                  max_steps=1000,
                  max_angle=45,
                  bounds=10,
-                 initial_altitude=10):
-        # print("fidds")
+                 initial_altitude=5):
 
         EzPickle.__init__(self)
         self.seed()
@@ -109,14 +108,14 @@ class _Task(gym.Env, EzPickle):
         reward = self._get_reward(status, state, d, x, y)
 
         # Lose bigly if we go outside window
-        if abs(x) >= self.bounds or abs(y) >= self.bounds:
+        if abs(x) >= self.bounds or abs(y) >= self.bounds or abs(z) >= self.bounds:
             self.done = True
             reward -= self.out_of_bounds_penalty
 
-        # Lose bigly for excess roll or pitch
-        elif abs(phi) >= self.max_angle or abs(theta) >= self.max_angle:
-            self.done = True
-            reward = -self.out_of_bounds_penalty
+        # # Lose bigly for excess roll or pitch
+        # elif abs(phi) >= self.max_angle or abs(theta) >= self.max_angle:
+        #     self.done = True
+        #     reward = -self.out_of_bounds_penalty
 
         # It's all over if we crash
         elif status == d.STATUS_CRASHED:
@@ -129,6 +128,8 @@ class _Task(gym.Env, EzPickle):
         if self.steps == self.max_steps:
             self.done = True
         self.steps += 1
+
+        # print(f"Steps: {self.steps}    Reward:{reward}    Action:{action}")
 
         # Extract 2D or 3D components of state and rerturn them with the rest
         return (np.array(self._get_state(state), dtype=np.float32),
@@ -201,4 +202,5 @@ class _Task(gym.Env, EzPickle):
 
     @abc.abstractmethod
     def _get_reward(self, status, state, d, x, y):
+        print("YOU FOUND ME. SOMETHING HAS GONE BAD.")
         return 0
