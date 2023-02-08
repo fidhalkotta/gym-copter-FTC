@@ -12,11 +12,13 @@ def _heuristic(env):
     # project_name = "gymCopter-Hover3DV3-PPO-1674806710"
     # project_name = "gymCopter-Hover3DV4-PPO-1674810537"
     # project_name = "gymCopter-Hover3DV5-PPO-1674812459"
-    # project_name = "gymCopter-Hover3DV6-PPO-1674993142"
     # project_name = "gymCopter-Hover3DV6-PPO-1674995181"
+    # project_name = "gymCopter-Hover3DV6-PPO-1674990560"
+    # project_name = "gymCopter-Hover3DV7-PPO-1674994191"
     # project_name = "gymCopter-Hover3DV8-1674996991"
-    project_name = "gymCopter-Hover3DV9-1675010997"
-    time_step = 9_200_000
+    # project_name = "gymCopter-Hover3DV9-1675010997"
+    project_name = "gymCopter-Hover3DV6-sigma=0_5-1675603657"
+    time_step = 1_800_000
     # project_name = "gymCopter-Hover3D-DDPG-1674386090"
     models_dir = f"models/{project_name}"
     model_path = f"{models_dir}/{time_step}.zip"
@@ -35,8 +37,6 @@ def _heuristic(env):
         action, _states = model.predict(obs)
         state, reward, done, _ = env.step(action)
 
-        print()
-
         total_reward += reward
 
         print('(%+0.2f,%+0.2f,%+0.2f)     steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (state[0], state[2], state[4], steps, reward, total_reward))
@@ -52,7 +52,7 @@ def main():
     episodes = 5
 
     for ep in range(episodes):
-        env = gym.make("gym_copter:Hover3D-v8")
+        env = gym.make("gym_copter:Hover3D-v6")
         env.reset()
 
         viewer = ThreeDHoverRenderer(env,

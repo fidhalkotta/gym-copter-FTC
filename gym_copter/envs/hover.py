@@ -20,3 +20,6 @@ class _Hover(_Task):
 
         # Simple reward for each step we complete
         return 1
+
+    def get_position_sigma(self):
+        return self.position_sigma

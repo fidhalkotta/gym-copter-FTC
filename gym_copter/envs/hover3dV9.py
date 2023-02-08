@@ -32,7 +32,8 @@ class Hover3DV9(_Hover, _ThreeD):
         return state
 
     def _get_reward(self, status, state, d, x, y):
-        position_sigma = 3
+        position_sigma = 0.5
+        self.position_sigma = position_sigma
         angle_sigma = np.pi / 5
 
         position_amplitude = 1
