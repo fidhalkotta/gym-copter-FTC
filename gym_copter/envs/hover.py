@@ -12,9 +12,9 @@ from gym_copter.envs.task import _Task
 
 class _Hover(_Task):
 
-    def __init__(self, observation_size, action_size, max_steps=1000):
+    def __init__(self, observation_size, action_size, max_steps=1000, out_of_bounds_penalty=20000, initial_altitude=8):
 
-        _Task.__init__(self, observation_size, action_size, max_steps=max_steps)
+        _Task.__init__(self, observation_size, action_size, max_steps=max_steps, out_of_bounds_penalty=out_of_bounds_penalty, initial_altitude=initial_altitude)
 
     def _get_reward(self, status, state, d, x, y):
 

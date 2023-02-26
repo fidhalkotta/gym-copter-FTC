@@ -14,6 +14,7 @@ from pidcontrollers import PositionHoldPidController
 from pidcontrollers import AltitudeHoldPidController
 
 from gym_copter.rendering.threed import ThreeDHoverRenderer
+from time import sleep
 
 
 def heuristic(state, pidcontrollers):
@@ -49,6 +50,8 @@ def heuristic(state, pidcontrollers):
 
 def main():
 
+    sleep(1)
+
     pidcontrollers = (
                       AngularVelocityPidController(),
                       AngularVelocityPidController(),
@@ -58,7 +61,7 @@ def main():
                       AltitudeHoldPidController()
                      )
 
-    demo3d('gym_copter:Hover3D-v9', heuristic,
+    demo3d('gym_copter:Hover3D-v10', heuristic,
            pidcontrollers, ThreeDHoverRenderer)
 
 
