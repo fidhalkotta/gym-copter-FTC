@@ -30,7 +30,7 @@ class _Task(gym.Env, EzPickle):
 
     def __init__(self, observation_size, action_size,
                  initial_random_force=30,
-                 out_of_bounds_penalty=100,
+                 out_of_bounds_penalty=20000,
                  max_steps=1000,
                  max_angle=45,
                  bounds=10,
@@ -63,6 +63,7 @@ class _Task(gym.Env, EzPickle):
         self.max_steps = max_steps
         self.bounds = bounds
         self.initial_altitude = initial_altitude
+        self.total_reward = 0
 
     def set_altitude(self, altitude):
 
@@ -108,7 +109,7 @@ class _Task(gym.Env, EzPickle):
         reward = self._get_reward(status, state, d, x, y)
 
         # Lose bigly if we go outside window
-        if abs(x) >= self.bounds or abs(y) >= self.bounds or abs(z) >= self.bounds:
+        if abs(x) >= self.bounds or abs(y) >= self.bounds or abs(z) >= self.bounds or z >= 0:
             self.done = True
             reward -= self.out_of_bounds_penalty
 
@@ -119,15 +120,19 @@ class _Task(gym.Env, EzPickle):
 
         # It's all over if we crash
         elif status == d.STATUS_CRASHED:
-
             # Crashed!
             self.done = True
             self.spinning = False
+
+        self.total_reward += reward
 
         # Don't run forever!
         if self.steps == self.max_steps:
             self.done = True
         self.steps += 1
+
+        if self.done:
+            print(f"DONE    steps={self.steps}   tr={self.total_reward}")
 
         # print(f"Steps: {self.steps}    Reward:{reward}    Action:{action}")
 
@@ -188,6 +193,7 @@ class _Task(gym.Env, EzPickle):
 
         # No steps or reward yet
         self.steps = 0
+        self.total_reward = 0
 
         # Helps synchronize rendering to dynamics
         self.start = time()

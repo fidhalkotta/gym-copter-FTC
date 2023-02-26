@@ -7,8 +7,8 @@ from gym_copter.rendering.threed import ThreeDHoverRenderer
 
 
 def main():
-    for _ in range(5):
-        env = gym.make("gym_copter:Hover3D-v0")
+    for _ in range(1):
+        env = gym.make("gym_copter:Hover3D-v10")
 
         seed = 42
 
@@ -31,9 +31,10 @@ def main():
 
             steps += 1
 
-            if (steps % 20 == 0) or done:
-                print('steps =  %04d    total_reward = %+0.2f' %
-                      (steps, total_reward))
+
+            print(
+                '(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (
+                state[0], state[2], state[4], state[6], state[8], state[10], steps, reward, total_reward))
 
             if done:
                 break

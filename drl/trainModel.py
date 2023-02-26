@@ -7,14 +7,12 @@ import os
 import time
 print("Setting up envs and models")
 
-env = gym.make("gym_copter:Hover3D-v9")
+env = gym.make("gym_copter:Hover3D-v10")
 env.reset()
 
 print("Setting Names")
 
-position_sigma = str(env.get_position_sigma()).replace(".", "_")
-
-project_name = f"gymCopter-Hover3DV9-sigma={position_sigma}-net_arch=256_256-{int(time.time())}"
+project_name = f"gymCopter-Hover3DV10-z_r_tol=0.1-r_f=1000-TESTTTT-{int(time.time())}"
 models_dir = f"models/{project_name}"
 
 logdir = "logs"
@@ -25,11 +23,12 @@ if not os.path.exists(models_dir):
 if not os.path.exists(logdir):
     os.makedirs(logdir)
 
-policy_kwargs = dict(net_arch=[dict(pi=[256, 256], vf=[256, 256])])
+# policy_kwargs = dict(net_arch=[dict(pi=[256, 256], vf=[256, 256])])
+# model = PPO('MlpPolicy', env, verbose=1, policy_kwargs=policy_kwargs, tensorboard_log=logdir)
 
-model = PPO('MlpPolicy', env, verbose=1, policy_kwargs=policy_kwargs, tensorboard_log=logdir)
+model = PPO('MlpPolicy', env,verbose=1, tensorboard_log=logdir)
 
-TIMESTEPS = 200_000
+TIMESTEPS = 5_000
 iters = 0
 
 print("Starting Training")

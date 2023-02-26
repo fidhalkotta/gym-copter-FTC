@@ -20,6 +20,10 @@ from gym_copter.envs.hover3dV6 import Hover3DV6
 from gym_copter.envs.hover3dV7 import Hover3DV7
 from gym_copter.envs.hover3dV8 import Hover3DV8
 from gym_copter.envs.hover3dV9 import Hover3DV9
+from gym_copter.envs.hover3dV10 import Hover3DV10
+
+from gym_copter.envs.hover3dV12 import Hover3DV12
+from gym_copter.envs.hover3dV13 import Hover3DV13
 
 
 print("Initialised ENVS")

@@ -5,6 +5,8 @@ from time import sleep
 
 from gym_copter.rendering.threed import ThreeDHoverRenderer
 
+from stable_baselines3.common.base_class import BaseAlgorithm
+
 
 def _heuristic(env):
     # project_name = "gymCopter-Hover3D-PPO-1674385145"
@@ -16,10 +18,9 @@ def _heuristic(env):
     # project_name = "gymCopter-Hover3DV6-PPO-1674995181"
     # project_name = "gymCopter-Hover3DV6-PPO-1674990560"
     # project_name = "gymCopter-Hover3DV7-PPO-1674994191"
-    #project_name = "gymCopter-Hover3DV8-1674996991"
-    # project_name = "gymCopter-Hover3DV9-sigma=0_5-net_arch=32_32-1675675609"
+    # project_name = "gymCopter-Hover3DV8-1674996991"
+    # project_name = "gymCopter-Hover3DV9-1675010997"
     # project_name = "gymCopter-Hover3DV6-sigma=0_5-1675603657"
-    # project_name = "gymCopter-Hover3DV10-z_r_tol=0.1-r_f=1000-1675863205"
     project_name = "gymCopter-Hover3DV10-z_r_tol=0.1-r_f=1000-1675863205"
     # project_name = "gymCopter-Hover3DV12-1675878758"
     # project_name = "gymCopter-Hover3DV13-1675922924"
@@ -29,6 +30,11 @@ def _heuristic(env):
 
     print(f"Project Name: {project_name}\nTimeStep: {time_step}")
 
+    print(env)
+
+    env = BaseAlgorithm._wrap_env(env, 1, True)
+
+    print(env)
 
     model = PPO.load(model_path, env=env)
 
@@ -39,15 +45,15 @@ def _heuristic(env):
     total_reward = 0
 
     while not done:
-        action, _ = model.predict(obs)
-        obs, reward, done, _ = env.step(action)
+        action, _states = model.predict(obs)
+        state, reward, done, _ = env.step(action)
 
         total_reward += reward
 
-        print('(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (obs[0], obs[2], obs[4], obs[6], obs[8], obs[10], steps, reward, total_reward))
+        # print('(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (state[0], state[2], state[4], state[6], state[8], state[10], steps, reward, total_reward))
         env.render()
 
-        sleep(1. / env.FRAMES_PER_SECOND)
+        sleep(1. / 60)
         steps += 1
 
     print(total_reward)

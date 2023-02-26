@@ -113,6 +113,28 @@ register(
     max_episode_steps=20000
 )
 
+# 3D hover V10: Just z plane no Gaussian
+register(
+    id='Hover3D-v10',
+    entry_point='gym_copter.envs:Hover3DV10',
+    max_episode_steps=20000
+)
+
+# 3D hover V12: r_a from Jiang and Lynch
+register(
+    id='Hover3D-v12',
+    entry_point='gym_copter.envs:Hover3DV12',
+    max_episode_steps=20000
+)
+
+# 3D hover V13: r_a but more positive from Jiang and Lynch
+register(
+    id='Hover3D-v13',
+    entry_point='gym_copter.envs:Hover3DV13',
+    max_episode_steps=20000
+)
+
+
 
 
 print("Registered Envs")

@@ -58,9 +58,11 @@ def _demo_heuristic(env, fun, pidcontrollers,
 
         steps += 1
 
-        if (steps % 20 == 0) or done:
-            print('steps =  %04d    current_reward = %+0.2f    total_reward = %+0.2f' %
-                  (steps, reward, total_reward))
+        print(action)
+
+        # print(
+        #     '(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (
+        #     state[0], state[2], state[4], state[6], state[8], state[10], steps, reward, total_reward))
 
         if done:
             break
