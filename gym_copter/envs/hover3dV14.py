@@ -5,6 +5,7 @@ Copyright (C) 2021 Simon D. Levy
 
 MIT License
 '''
+import math
 
 from numpy import degrees
 import numpy as np
@@ -15,10 +16,16 @@ from gym_copter.sensors.vision.vs import VisionSensor
 from gym_copter.sensors.vision.dvs import DVS
 
 
-class Hover3DV8(_Hover, _ThreeD):
+def gaussian_transform(a, sigma, x, y_offset=0):
+    y = a * (np.exp(-1 * ((x ** 2) / (2 * sigma)))) + y_offset
+
+    return y
+
+
+class Hover3DV14(_Hover, _ThreeD):
 
     def __init__(self, obs_size=12):
-        _Hover.__init__(self, obs_size, 4, max_steps=20000, initial_altitude=5, initial_random_position=False)
+        _Hover.__init__(self, obs_size, 4, max_steps=20000, out_of_bounds_penalty=5000, initial_altitude=8)
         _ThreeD.__init__(self)
 
         # For generating CSV file
@@ -33,23 +40,22 @@ class Hover3DV8(_Hover, _ThreeD):
 
     def _get_reward(self, status, state, d, x, y):
         position_sigma = 3
-
         position_amplitude = 1
 
         target = 0, 0, -5
 
-        x_reward = self.gaussian_transform(position_amplitude, position_sigma, state[0] - target[0])
-        y_reward = self.gaussian_transform(position_amplitude, position_sigma, state[2] - target[1])
-        z_reward = self.gaussian_transform(position_amplitude, position_sigma, state[4] - target[2])
+        x_reward = gaussian_transform(position_amplitude, position_sigma, state[0] - target[0])
+        y_reward = gaussian_transform(position_amplitude, position_sigma, state[2] - target[1])
+        z_reward = gaussian_transform(position_amplitude, position_sigma, state[4] - target[2])
 
-        reward =((0.1 * x_reward) + (0.1 * y_reward) + (0.8 * z_reward))
+        reward = ((0.075 * x_reward) + (0.075 * y_reward) + (0.85 * z_reward))
+
+        z = state[4]
+
+        if abs(x) >= self.bounds or abs(y) >= self.bounds or abs(z) >= self.bounds or z >= 0:
+            reward -= self.out_of_bounds_penalty
 
         return reward
-
-    def gaussian_transform(self, a, sigma, x, y_offset=0):
-        y = a * (np.exp(-1 * ((x ** 2) / (2 * sigma)))) + y_offset
-
-        return y
 
     def use_hud(self):
         _ThreeD.use_hud(self)
@@ -60,19 +66,22 @@ class Hover3DV8(_Hover, _ThreeD):
     def demo_pose(self, args):
         _ThreeD.demo_pose(self, args)
 
+    def get_position_sigma(self):
+        return NotImplementedError
 
-class HoverVisual(Hover3DV8):
+
+class HoverVisual(Hover3DV14):
     RES = 16
 
     def __init__(self, vs=VisionSensor(res=RES)):
-        Hover3DV8.__init__(self)
+        Hover3DV14.__init__(self)
 
         self.vs = vs
 
         self.image = None
 
     def step(self, action):
-        result = Hover3DV8.step(self, action)
+        result = Hover3DV14.step(self, action)
 
         x, y, z, phi, theta, psi = self.pose
 
