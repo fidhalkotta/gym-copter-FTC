@@ -134,6 +134,43 @@ register(
     max_episode_steps=20000
 )
 
+# bug fix 23/02/23
+
+# 3D hover V14: gaussian x,y,z episode doesnt terminate
+register(
+    id='Hover3D-v14',
+    entry_point='gym_copter.envs:Hover3DV14',
+    max_episode_steps=20000
+)
+
+# 3D hover V15: gaussian x,y,z but episode terminates on out of bounds
+register(
+    id='Hover3D-v15',
+    entry_point='gym_copter.envs:Hover3DV15',
+    max_episode_steps=20000
+)
+
+# 3D hover V16: gaussian x,y,z episode doesnt terminate but no random initial position
+register(
+    id='Hover3D-v16',
+    entry_point='gym_copter.envs:Hover3DV16',
+    max_episode_steps=20000
+)
+
+# 3D hover V17: gaussian x,y,z episode does terminate but no random initial position
+register(
+    id='Hover3D-v17',
+    entry_point='gym_copter.envs:Hover3DV17',
+    max_episode_steps=20000
+)
+
+# 3D hover V18: gaussian x,y,z, phi, theta episode does terminate but no random initial position
+register(
+    id='Hover3D-v18',
+    entry_point='gym_copter.envs:Hover3DV18',
+    max_episode_steps=20000
+)
+
 
 
 

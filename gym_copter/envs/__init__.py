@@ -25,5 +25,13 @@ from gym_copter.envs.hover3dV10 import Hover3DV10
 from gym_copter.envs.hover3dV12 import Hover3DV12
 from gym_copter.envs.hover3dV13 import Hover3DV13
 
+# bug fix 23/02/23
+
+from gym_copter.envs.hover3dV14 import Hover3DV14
+from gym_copter.envs.hover3dV15 import Hover3DV15
+from gym_copter.envs.hover3dV16 import Hover3DV16
+from gym_copter.envs.hover3dV17 import Hover3DV17
+from gym_copter.envs.hover3dV18 import Hover3DV18
+
 
 print("Initialised ENVS")
