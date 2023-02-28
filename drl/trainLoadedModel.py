@@ -7,15 +7,15 @@ import time
 
 print("Setting Names")
 
-project_name = "gymCopter-Hover3DV10-z_r_tol=0.1-r_f=1000-1675863205"
-time_step = 15_000_000
+project_name = "gymCopter-Hover3DV17-1677488099"
+time_step = 5_000_000
 # project_name = "gymCopter-Hover3D-DDPG-1674386090"
 models_dir = f"models/{project_name}"
 model_path = f"{models_dir}/{time_step}.zip"
 
 print(f"Project Name: {project_name}\nTimeStep: {time_step}")
 
-env = gym.make("gym_copter:Hover3D-v10")
+env = gym.make("gym_copter:Hover3D-v17")
 env.reset()
 
 model = PPO.load(model_path, env=env)
@@ -44,11 +44,11 @@ if not os.path.exists(logdir):
 
 print("Setting up envs and models")
 
-TIMESTEPS = 5_000
+TIMESTEPS = 200_000
 iters = 0
 
 print("Restarting Training")
-for i in range(1, 35):
+for i in range(1, 26):
     model.learn(total_timesteps=TIMESTEPS, reset_num_timesteps=False, tb_log_name=project_name)
     model.save(f"{models_dir}/{time_step + (TIMESTEPS * i)}")
 

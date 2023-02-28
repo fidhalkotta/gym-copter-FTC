@@ -7,6 +7,7 @@ MIT License
 '''
 
 import abc
+import random
 
 import numpy as np
 from numpy import radians
@@ -34,7 +35,8 @@ class _Task(gym.Env, EzPickle):
                  max_steps=1000,
                  max_angle=45,
                  bounds=10,
-                 initial_altitude=5):
+                 initial_altitude=5,
+                 initial_random_position=True):
 
         EzPickle.__init__(self)
         self.seed()
@@ -59,6 +61,7 @@ class _Task(gym.Env, EzPickle):
 
         # Grab remaining settings
         self.initial_random_force = initial_random_force
+        self.initial_random_position = initial_random_position
         self.out_of_bounds_penalty = out_of_bounds_penalty
         self.max_steps = max_steps
         self.bounds = bounds
@@ -109,7 +112,11 @@ class _Task(gym.Env, EzPickle):
         reward = self._get_reward(status, state, d, x, y)
 
         # Lose bigly if we go outside window
-        if abs(x) >= self.bounds or abs(y) >= self.bounds or abs(z) >= self.bounds or z >= 0:
+        # if abs(x) >= self.bounds or abs(y) >= self.bounds or abs(z) >= self.bounds or z >= 0:
+        #     self.done = True
+        #     reward -= self.out_of_bounds_penalty
+
+        if z >= 0:
             self.done = True
             reward -= self.out_of_bounds_penalty
 
@@ -131,8 +138,8 @@ class _Task(gym.Env, EzPickle):
             self.done = True
         self.steps += 1
 
-        if self.done:
-            print(f"DONE    steps={self.steps}   tr={self.total_reward}")
+        # if self.done:
+        #     print(f"DONE    steps={self.steps}   tr={self.total_reward}")
 
         # print(f"Steps: {self.steps}    Reward:{reward}    Action:{action}")
 
@@ -152,6 +159,9 @@ class _Task(gym.Env, EzPickle):
 
         if pose is None:
             pose = (0, 0, self.initial_altitude, 0, 0)
+
+        if self.initial_random_position:
+            pose = (random.uniform(-8, 8), random.uniform(-8, 8), random.uniform(2, 8), 0, 0)
 
         # Support for rendering
         self.pose = None

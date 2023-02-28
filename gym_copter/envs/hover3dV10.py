@@ -21,7 +21,7 @@ class Hover3DV10(_Hover, _ThreeD):
         self.r_f = 1_000
         self.p = 20_000
 
-        _Hover.__init__(self, obs_size, 4, max_steps=20000, out_of_bounds_penalty=self.p, initial_altitude=8)
+        _Hover.__init__(self, obs_size, 4, max_steps=20000, out_of_bounds_penalty=self.p, initial_altitude=8, initial_random_position=False)
         _ThreeD.__init__(self)
 
         # For generating CSV file
