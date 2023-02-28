@@ -22,7 +22,6 @@ def _demo_heuristic(env, fun, pidcontrollers,
     env.seed(seed)
     np.random.seed(seed)
 
-    total_reward = 0
     steps = 0
     state = env.reset()
 
@@ -41,8 +40,12 @@ def _demo_heuristic(env, fun, pidcontrollers,
 
         action = np.zeros(actsize) if nopid else fun(state, pidcontrollers)
 
+        action = list(action)
+
+        if env.total_reward > 2000:
+            action[0] *= 0.9
+
         state, reward, done, _ = env.step(action)
-        total_reward += reward
 
         if csvfile is not None:
 
@@ -58,11 +61,8 @@ def _demo_heuristic(env, fun, pidcontrollers,
 
         steps += 1
 
-        print(action)
-
-        # print(
-        #     '(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (
-        #     state[0], state[2], state[4], state[6], state[8], state[10], steps, reward, total_reward))
+        print(
+            '(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (state[0], state[2], state[4], state[6], state[8], state[10], steps, reward, env.total_reward))
 
         if done:
             break

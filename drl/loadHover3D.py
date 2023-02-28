@@ -39,10 +39,17 @@ def _heuristic(env):
     done = False
 
     steps = 0
-    total_reward = 0
+
+    flip = False
 
     while not done:
         action, _ = model.predict(obs)
+
+        if env.total_reward > 2000:
+            if not flip:
+                env.handle_fault_injection()
+                flip = True
+
         obs, reward, done, _ = env.step(action)
 
         # total_reward += reward

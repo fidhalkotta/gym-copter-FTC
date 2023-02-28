@@ -68,6 +68,9 @@ class _Task(gym.Env, EzPickle):
         self.initial_altitude = initial_altitude
         self.total_reward = 0
 
+        # Initialize fault map to no faults
+        self.fault_map = [1, 1, 1, 1]
+
     def set_altitude(self, altitude):
 
         self.initial_altitude = altitude
@@ -89,6 +92,10 @@ class _Task(gym.Env, EzPickle):
         # Stop motors after safe landing
         if status == d.STATUS_LANDED:
             self.spinning = False
+
+        # Transform action based on fault map
+        for i in range(len(self.fault_map)):
+            action[i] *= self.fault_map[i]
 
         # In air, set motors from action
         else:
@@ -118,7 +125,6 @@ class _Task(gym.Env, EzPickle):
 
         if z >= 0:
             self.done = True
-            reward -= self.out_of_bounds_penalty
 
         # # Lose bigly for excess roll or pitch
         # elif abs(phi) >= self.max_angle or abs(theta) >= self.max_angle:

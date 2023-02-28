@@ -29,6 +29,10 @@ def _create_line3d(axes, color):
     return line3d
 
 
+def _change_line3d_color(line, color):
+    line.set_color(color)
+
+
 class _Vehicle:
 
     VEHICLE_SIZE = 0.5
@@ -49,6 +53,9 @@ class _Vehicle:
         self.xs = []
         self.ys = []
         self.zs = []
+
+        # Previous trajectories
+        self.prev_trajs = []
 
         # For render() support
         self.fig = None
@@ -81,6 +88,7 @@ class _Vehicle:
         if self.showtraj:
             self.traj_line.set_data(self.xs, self.ys)
             self.traj_line.set_3d_properties(self.zs)
+
 
         # Loop over arms and propellers
         for j in range(4):
@@ -126,6 +134,21 @@ class _Vehicle:
         # Set axis points
         axis.set_data(x+xx, y+yy)
         axis.set_3d_properties(z+zz+dz)
+
+    def _handle_fault_injection(self, ax, color):
+        self.prev_trajs.append(self.traj_line)
+
+        # Reset positions
+        self.xs = []
+        self.ys = []
+        self.zs = []
+
+        self.traj_line = _create_line3d(ax, color)
+
+    def change_color(self, color):
+        for j in range(4):
+            _change_line3d_color(self.arms_lines[j], color)
+            _change_line3d_color(self.props_lines[j], color)
 
 
 class ThreeDRenderer:
@@ -187,6 +210,9 @@ class ThreeDRenderer:
         self.axes.set_xlim((-lim, lim))
         self.axes.set_ylim((-lim, lim))
         self.axes.set_zlim((0, lim))
+
+        # Initialize fault injection handling
+        self.fault_injected = False
 
         # Create a representation of the copter
         self.copter = _Vehicle(self.axes, showtraj)
@@ -271,6 +297,19 @@ class ThreeDRenderer:
 
         except Exception:
             pass
+
+    def flip_fault_state(self):
+        self.fault_injected = not self.fault_injected
+
+        if self.fault_injected:
+            color = 'r'
+        else:
+            color = 'b'
+
+        self.copter._handle_fault_injection(self.axes, color)
+        self.copter.change_color(color)
+
+
 
 
 class ThreeDLanderRenderer(ThreeDRenderer):
