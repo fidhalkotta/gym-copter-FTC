@@ -32,6 +32,9 @@ class Hover3DV18(_Hover, _ThreeD):
         self.STATE_NAMES = ['X', 'dX', 'Y', 'dY', 'Z', 'dZ',
                             'Phi', 'dPhi', 'Theta', 'dTheta', 'Psi', 'dPsi']
 
+        # For generating plots
+        self.plot = False
+
     def reset(self):
         return _Hover._reset(self)
 
@@ -78,13 +81,15 @@ class Hover3DV18(_Hover, _ThreeD):
         return action
 
     def handle_fault_injection(self):
-        self.fault_map = [0.9, 1, 1, 1]
+        self.fault_map = [0.5, 1, 1, 1]
         self.viewer.flip_fault_state()
 
     def handle_fault_removal(self):
         self.fault_map = [1, 1, 1, 1]
         self.viewer.flip_fault_state()
 
+    def create_plots(self):
+        self.plot = True
 
 
 class HoverVisual(Hover3DV18):
