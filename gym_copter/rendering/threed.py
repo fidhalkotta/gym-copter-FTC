@@ -18,6 +18,7 @@ from matplotlib.patches import Circle
 from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
 import mpl_toolkits.mplot3d.art3d as art3d
 from PIL import Image
+import seaborn as sns
 
 
 def _create_line3d(axes, color):
@@ -69,6 +70,8 @@ class _Vehicle:
         self.px = self.PROPELLER_RADIUS * np.sin(a)
         self.py = self.PROPELLER_RADIUS * np.cos(a)
 
+        self.plot_xs = []
+
     def update(self, pose):
 
         x, y, z, phi, theta, psi = pose
@@ -83,6 +86,8 @@ class _Vehicle:
         self.xs.append(x)
         self.ys.append(y)
         self.zs.append(z)
+
+        self.plot_xs.append(x)
 
         # Plot trajectory if indicated
         if self.showtraj:
@@ -185,6 +190,8 @@ class ThreeDRenderer:
         self.fig = plt.figure()
         self.axes = self.fig.add_axes([0, 0, view_width, 1], projection='3d')
 
+        self.plot_fig = None
+
         # Set up axis labels
         self.axes.set_xlabel('X (m)')
         self.axes.set_ylabel('Y (m)')
@@ -220,7 +227,6 @@ class ThreeDRenderer:
         self.closed = False
 
     def start(self):
-
         self.thread.start()
 
         # Instantiate the animator
@@ -254,6 +260,29 @@ class ThreeDRenderer:
             self.closed = True
 
         self.closed = True
+
+        # print("1")
+        #
+        # self.plot_fig = plt.Figure()
+        # print("2")
+        #
+        # try:
+        #
+        #     # Plot the responses for different events and regions
+        #     sns.lineplot(x=range(len(self.copter.plot_xs)), y=self.copter.plot_xs)
+        #
+        #     print("3")
+        #
+        #     plt.savefig('save_as_a_png.png')
+        #
+        #     print("4")
+        #
+        #     plt.close(self.plot_fig)
+        #
+        #     print("5")
+        # except Exception:
+        #     pass
+
 
     def render(self, mode):
 

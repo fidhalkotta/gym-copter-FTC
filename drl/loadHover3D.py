@@ -1,7 +1,15 @@
 import gym as gym
-import numpy as np
 from stable_baselines3 import PPO, DDPG
 from time import sleep
+
+import numpy as np
+import pandas as pd
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+import seaborn.objects as so
 
 from gym_copter.rendering.threed import ThreeDHoverRenderer
 
@@ -41,32 +49,44 @@ def _heuristic(env):
     steps = 0
 
     flip = False
+    #
+    # states_data = pd.DataFrame(columns=["time_step", "x", "y", "z", "phi", "theta", "psi"])
+    # states_data = states_data.append([steps, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]], ignore_index=True)
+
+    states_data = pd.DataFrame(columns=["time_step", "x", "y", "z", "phi", "theta", "psi"])
+
+    new_df = pd.DataFrame([[steps, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
+                          columns=["time_step", "x", "y", "z", "phi", "theta", "psi"])
+    states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
 
     while not done:
         action, _ = model.predict(obs)
 
-        if env.total_reward > 2000:
+        if env.total_reward > 500:
             if not flip:
                 env.handle_fault_injection()
                 flip = True
 
         obs, reward, done, _ = env.step(action)
 
-        # total_reward += reward
-
         print('(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (obs[0], obs[2], obs[4], obs[6], obs[8], obs[10], steps, reward, env.total_reward))
         env.render()
-
 
         sleep(1. / env.FRAMES_PER_SECOND)
         steps += 1
 
+        new_df = pd.DataFrame([[steps, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
+                              columns=["time_step", "x", "y", "z", "phi", "theta", "psi"])
+        states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
+
     print(env.total_reward)
     env.close()
 
+    states_data.to_csv('states_data.csv', index=False)
+
 
 def main():
-    episodes = 5
+    episodes = 1
 
     for ep in range(episodes):
         # input("Press enter in the command window to continue.....")

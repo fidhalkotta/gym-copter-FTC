@@ -24,6 +24,7 @@ def _demo_heuristic(env, fun, pidcontrollers,
 
     steps = 0
     state = env.reset()
+    flip = False
 
     dt = 1. / env.FRAMES_PER_SECOND
 
@@ -39,11 +40,12 @@ def _demo_heuristic(env, fun, pidcontrollers,
     while True:
 
         action = np.zeros(actsize) if nopid else fun(state, pidcontrollers)
-
         action = list(action)
 
-        if env.total_reward > 2000:
-            action[0] *= 0.9
+        if env.total_reward > 1000:
+            if not flip:
+                env.handle_fault_injection()
+                flip = True
 
         state, reward, done, _ = env.step(action)
 

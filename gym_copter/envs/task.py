@@ -18,6 +18,7 @@ from gym import spaces
 from gym.utils import EzPickle, seeding
 
 from gym_copter.dynamics import Dynamics, djiphantom_params
+from gym_copter.envs.plot import Plotter
 
 
 class _Task(gym.Env, EzPickle):
@@ -70,6 +71,8 @@ class _Task(gym.Env, EzPickle):
 
         # Initialize fault map to no faults
         self.fault_map = [1, 1, 1, 1]
+
+        self.states = []
 
     def set_altitude(self, altitude):
 
@@ -149,17 +152,22 @@ class _Task(gym.Env, EzPickle):
 
         # print(f"Steps: {self.steps}    Reward:{reward}    Action:{action}")
 
-        # Extract 2D or 3D components of state and rerturn them with the rest
-        return (np.array(self._get_state(state), dtype=np.float32),
+        current_state = np.array(self._get_state(state), dtype=np.float32)
+
+        self.states.append(current_state)
+
+        # Extract 2D or 3D components of state and return them with the rest
+        return (current_state,
                 reward,
                 self.done,
                 {})
 
     def close(self):
-
         gym.Env.close(self)
         if self.viewer is not None:
             self.viewer.close()
+
+        # self.plotter.plot(states=self.states, steps=self.steps)
 
     def _reset(self, pose=None, perturb=True):
 
@@ -214,8 +222,13 @@ class _Task(gym.Env, EzPickle):
         # Helps synchronize rendering to dynamics
         self.start = time()
 
+        initial_state = self.step(np.zeros(self.action_size), initializing=True)[0]
+
+        self.states = [initial_state]
+        self.plotter = Plotter()
+
         # Return initial state
-        return self.step(np.zeros(self.action_size), initializing=True)[0]
+        return initial_state
 
     def _randforce(self):
 
