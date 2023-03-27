@@ -34,8 +34,15 @@ def _heuristic(env):
     # project_name = "gymCopter-Hover3DV14-1677459385"
     # project_name = "gymCopter-Hover3DV16-1677483190"
     # project_name = "gymCopter-Hover3DV17-1677488099"
-    project_name = "gymCopter-Hover3DV18-initial_random_position=False-1677490451"
-    time_step = 2_800_000
+    # project_name = "gymCopter-Hover3DV18-initial_random_position=False-1677490451"
+    # project_name = "gymCopter-Hover3DV19-irp=False-1678092587"
+    # project_name = "gymCopter-Hover3DV20-irp=False-1678915917"
+    # project_name = "gymCopter-Hover3DV21-irp=False-1678922223"
+    # project_name = "gymCopter-Hover3DV22-irp=False-1678954838"
+    # project_name = "gymCopter-Hover3DV23-irp=False-1678962852"
+    # project_name = "gymCopter-Hover3DV24-irp=False-1679299652"
+    project_name = "gymCopter-Hover3DV25-irp=False-1679300804"
+    time_step = 2_000_000
     models_dir = f"models/{project_name}"
     model_path = f"{models_dir}/{time_step}.zip"
 
@@ -44,6 +51,7 @@ def _heuristic(env):
     model = PPO.load(model_path, env=env)
 
     obs = env.reset()
+    env.set_fault_state(True)
     done = False
 
     steps = 0
@@ -62,10 +70,10 @@ def _heuristic(env):
     while not done:
         action, _ = model.predict(obs)
 
-        if env.total_reward > 500:
-            if not flip:
-                env.handle_fault_injection()
-                flip = True
+        # if env.total_reward > 500:
+        #     if not flip:
+        #         env.handle_fault_injection()
+        #         flip = True
 
         obs, reward, done, _ = env.step(action)
 
@@ -82,15 +90,15 @@ def _heuristic(env):
     print(env.total_reward)
     env.close()
 
-    states_data.to_csv('states_data.csv', index=False)
+    # states_data.to_csv('states_data_hover3dV19.csv', index=False)
 
 
 def main():
-    episodes = 1
+    episodes = 3
 
     for ep in range(episodes):
         # input("Press enter in the command window to continue.....")
-        env = gym.make("gym_copter:Hover3D-v18")
+        env = gym.make("gym_copter:Hover3D-v25")
         env.reset()
 
         viewer = ThreeDHoverRenderer(env,

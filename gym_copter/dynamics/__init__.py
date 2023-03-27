@@ -307,6 +307,7 @@ class Dynamics:
 
         return np.dot(R, inertial)
 
+
     def _bodyToInertial(body, rotation, inertial):
         '''
          Frame-of-reference conversion routines.

@@ -171,6 +171,56 @@ register(
     max_episode_steps=20000
 )
 
+# 3D hover V19: Similar to V10, no random init position, no termination
+register(
+    id='Hover3D-v19',
+    entry_point='gym_copter.envs:Hover3DV19',
+    max_episode_steps=20000
+)
+
+# 3D hover V20: same as V19 but limiting angles to 2pi
+register(
+    id='Hover3D-v20',
+    entry_point='gym_copter.envs:Hover3DV20',
+    max_episode_steps=20000
+)
+
+# 3D hover V21: same as V18 Fault half the time
+register(
+    id='Hover3D-v21',
+    entry_point='gym_copter.envs:Hover3DV21',
+    max_episode_steps=20000
+)
+
+# 3D hover V22: same as V21 but yaw also in reward
+register(
+    id='Hover3D-v22',
+    entry_point='gym_copter.envs:Hover3DV22',
+    max_episode_steps=20000
+)
+
+# 3D hover V23: same as V22 but always faulty
+register(
+    id='Hover3D-v23',
+    entry_point='gym_copter.envs:Hover3DV23',
+    max_episode_steps=20000
+)
+
+# 3D hover V24: same as V23, always faulty, but now with angular rates instead of attitude dot, body frame rates instead of inertial frame
+register(
+    id='Hover3D-v24',
+    entry_point='gym_copter.envs:Hover3DV24',
+    max_episode_steps=20000
+)
+
+# 3D hover V25: same as V23, always faulty with psidot instead of psu
+register(
+    id='Hover3D-v25',
+    entry_point='gym_copter.envs:Hover3DV25',
+    max_episode_steps=20000
+)
+
+
 
 
 

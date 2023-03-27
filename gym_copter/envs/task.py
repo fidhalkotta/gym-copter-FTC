@@ -7,6 +7,7 @@ MIT License
 '''
 
 import abc
+import math
 import random
 
 import numpy as np
@@ -71,6 +72,7 @@ class _Task(gym.Env, EzPickle):
 
         # Initialize fault map to no faults
         self.fault_map = [1, 1, 1, 1]
+        self.fault_magnitude = [1, 1, 1, 1]
 
         self.states = []
 
@@ -156,6 +158,10 @@ class _Task(gym.Env, EzPickle):
 
         self.states.append(current_state)
 
+        for i in range(0, len(current_state)):
+            if math.isnan(current_state[i]):
+                print("Fidhal Panic NaN State")
+
         # Extract 2D or 3D components of state and return them with the rest
         return (current_state,
                 reward,
@@ -226,6 +232,14 @@ class _Task(gym.Env, EzPickle):
 
         self.states = [initial_state]
         self.plotter = Plotter()
+
+        self.fault_map = [0.5, 1, 1, 1]
+
+        # if random.randint(0, 1) == 1:
+        #     self.fault_map = self.fault_magnitude
+        #
+        #     if self.viewer:
+        #         self.viewer.flip_fault_state()
 
         # Return initial state
         return initial_state

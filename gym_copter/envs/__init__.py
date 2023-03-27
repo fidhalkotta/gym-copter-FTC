@@ -32,6 +32,16 @@ from gym_copter.envs.hover3dV15 import Hover3DV15
 from gym_copter.envs.hover3dV16 import Hover3DV16
 from gym_copter.envs.hover3dV17 import Hover3DV17
 from gym_copter.envs.hover3dV18 import Hover3DV18
+from gym_copter.envs.hover3dV19 import Hover3DV19
+from gym_copter.envs.hover3dV20 import Hover3DV20
+
+# Fault in training
+from gym_copter.envs.hover3dV21 import Hover3DV21
+from gym_copter.envs.hover3dV22 import Hover3DV22
+from gym_copter.envs.hover3dV23 import Hover3DV23
+from gym_copter.envs.hover3dV24 import Hover3DV24
+from gym_copter.envs.hover3dV25 import Hover3DV25
+
 
 
 print("Initialised ENVS")
