@@ -9,6 +9,7 @@ MIT License
 
 from time import sleep
 import numpy as np
+import pandas as pd
 
 import gym
 
@@ -23,7 +24,8 @@ def _demo_heuristic(env, fun, pidcontrollers,
     np.random.seed(seed)
 
     steps = 0
-    state = env.reset()
+    obs = env.reset()
+    done = False
     flip = False
 
     dt = 1. / env.FRAMES_PER_SECOND
@@ -37,17 +39,22 @@ def _demo_heuristic(env, fun, pidcontrollers,
                                       for k in range(1, actsize+1)]))
         csvfile.write(',' + ','.join(env.STATE_NAMES) + '\n')
 
-    while True:
+    states_data = pd.DataFrame(columns=["time_step", "x", "y", "z", "phi", "theta", "psi"])
 
-        action = np.zeros(actsize) if nopid else fun(state, pidcontrollers)
+    new_df = pd.DataFrame([[steps, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
+                          columns=["time_step", "x", "y", "z", "phi", "theta", "psi"])
+    states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
+
+    while not done and steps < 1200:
+        action = np.zeros(actsize) if nopid else fun(obs, pidcontrollers)
         action = list(action)
 
-        if env.total_reward > 1000:
+        if env.total_reward > 500:
             if not flip:
                 env.handle_fault_injection()
                 flip = True
 
-        state, reward, done, _ = env.step(action)
+        obs, reward, done, _ = env.step(action)
 
         if csvfile is not None:
 
@@ -55,7 +62,7 @@ def _demo_heuristic(env, fun, pidcontrollers,
 
             csvfile.write((',%f' * actsize) % tuple(action))
 
-            csvfile.write(((',%f' * len(state)) + '\n') % tuple(state))
+            csvfile.write(((',%f' * len(obs)) + '\n') % tuple(obs))
 
         env.render()
 
@@ -64,10 +71,14 @@ def _demo_heuristic(env, fun, pidcontrollers,
         steps += 1
 
         print(
-            '(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (state[0], state[2], state[4], state[6], state[8], state[10], steps, reward, env.total_reward))
+            '(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (obs[0], obs[2], obs[4], obs[6], obs[8], obs[10], steps, reward, env.total_reward))
 
-        if done:
-            break
+
+        new_df = pd.DataFrame([[steps, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
+                              columns=["time_step", "x", "y", "z", "phi", "theta", "psi"])
+        states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
+
+    states_data.to_csv('states_data_hover3dV18_PID.csv', index=False)
 
     env.close()
 
