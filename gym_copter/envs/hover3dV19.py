@@ -22,9 +22,11 @@ def gaussian_transform(a, sigma, x, y_offset=0):
     return y
 
 
-class Hover3DV18(_Hover, _ThreeD):
+class Hover3DV19(_Hover, _ThreeD):
 
     def __init__(self, obs_size=12):
+        self.r_f = 5
+
         _Hover.__init__(self, obs_size, 4, max_steps=20000, out_of_bounds_penalty=100, initial_altitude=8, initial_random_position=False)
         _ThreeD.__init__(self)
 
@@ -42,23 +44,26 @@ class Hover3DV18(_Hover, _ThreeD):
         return state
 
     def _get_reward(self, status, state, d, x, y):
-        position_sigma = 3
-        self.position_sigma = position_sigma
-        angle_sigma = np.pi / 5
 
-        position_amplitude = 1
-        angle_amplitude = 1
+        w = 0.1, 0.1, 0.6, 0.1, 0.1
 
         target = 0, 0, -5
 
-        x_reward = gaussian_transform(position_amplitude, position_sigma, state[0] - target[0])
-        y_reward = gaussian_transform(position_amplitude, position_sigma, state[2] - target[1])
-        z_reward = gaussian_transform(position_amplitude, position_sigma, state[4] - target[2])
+        x_r = state[0] - target[0]
+        y_r = state[2] - target[1]
+        z_r = state[4] - target[2]
 
-        phi_reward = gaussian_transform(angle_amplitude, angle_sigma, state[6])
-        theta_reward = gaussian_transform(angle_amplitude, angle_sigma, state[8])
+        phi_r = state[6]
+        theta_r = state[8]
 
-        reward = (0.1 * x_reward) + (0.1 * y_reward) + (0.6 * z_reward) + (0.1 * phi_reward) + (0.1 * theta_reward)
+        c = - (w[0] * (x_r**2)) - (w[1] * (y_r**2)) - (w[2] * (z_r**2)) - (w[3] * (phi_r**2)) - (w[4] * (theta_r**2))
+
+        reward = c
+
+        if math.sqrt((x_r**2 + y_r**2 + z_r**2)) < 0.1:
+            reward += self.r_f
+
+        # print(f"envReward={reward}")
 
         return reward
 
@@ -74,15 +79,14 @@ class Hover3DV18(_Hover, _ThreeD):
     def get_position_sigma(self):
         return NotImplementedError
 
-    # Don't think this does anything
-    # def fault_action_transformer(self, action):
-    #     for i in range(len(self.fault_map)):
-    #         action[i] *= self.fault_map[i]
-    #
-    #     return action
+    def fault_action_transformer(self, action):
+        for i in range(len(self.fault_map)):
+            action[i] *= self.fault_map[i]
+
+        return action
 
     def handle_fault_injection(self):
-        self.fault_map = [0.8, 1, 1, 1]
+        self.fault_map = [0.5, 1, 1, 1]
         self.viewer.flip_fault_state()
 
     def handle_fault_removal(self):
@@ -93,18 +97,18 @@ class Hover3DV18(_Hover, _ThreeD):
         self.plot = True
 
 
-class HoverVisual(Hover3DV18):
+class HoverVisual(Hover3DV19):
     RES = 16
 
     def __init__(self, vs=VisionSensor(res=RES)):
-        Hover3DV18.__init__(self)
+        Hover3DV19.__init__(self)
 
         self.vs = vs
 
         self.image = None
 
     def step(self, action):
-        result = Hover3DV18.step(self, action)
+        result = Hover3DV19.step(self, action)
 
         x, y, z, phi, theta, psi = self.pose
 
