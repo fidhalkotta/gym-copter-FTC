@@ -106,7 +106,7 @@ class Dynamics:
 
         # Initialize inertial frame acceleration in NED coordinates
         self._inertialAccel = (
-            Dynamics._bodyZToInertial(-self.G, (0, 0, 0)))
+            Dynamics._bodyToInertial((0.0, 0.0, -self.G), (0, 0, 0)))
 
         # No perturbation yet
         self._perturb = np.zeros(6)
@@ -137,7 +137,7 @@ class Dynamics:
         # Use the current Euler angles to rotate the orthogonal thrust vector
         # into the inertial frame.  Negate to use NED.
         euler = (self._x[6], self._x[8], self._x[10])
-        accelNED = Dynamics._bodyZToInertial(-U1 / self.M, euler)
+        accelNED = Dynamics._bodyToInertial((0, 0, -U1 / self.M), euler)
 
         # Compute net vertical acceleration by subtracting gravity
         netz = accelNED[2] + self.G
@@ -308,7 +308,7 @@ class Dynamics:
         return np.dot(R, inertial)
 
 
-    def _bodyToInertial(body, rotation, inertial):
+    def _bodyToInertial(body, rotation):
         '''
          Frame-of-reference conversion routines.
 

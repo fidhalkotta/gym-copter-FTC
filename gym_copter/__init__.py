@@ -220,6 +220,22 @@ register(
     max_episode_steps=20000
 )
 
+# Bug fix 26/03/23 No longer using incorrect bodyToInertial in dynamics
+
+# 3D hover V26: same as V24, Fixed bodyToInertial funciton in dynamics
+register(
+    id='Hover3D-v26',
+    entry_point='gym_copter.envs:Hover3DV26',
+    max_episode_steps=20000
+)
+
+# 3D hover V27: Same as V26, instead of all attitude rates, theta and phi are just values and psi is psirate
+register(
+    id='Hover3D-v27',
+    entry_point='gym_copter.envs:Hover3DV27',
+    max_episode_steps=20000
+)
+
 
 
 
