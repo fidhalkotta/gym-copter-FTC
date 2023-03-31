@@ -41,8 +41,11 @@ def _heuristic(env):
     # project_name = "gymCopter-Hover3DV22-irp=False-1678954838"
     # project_name = "gymCopter-Hover3DV23-irp=False-1678962852"
     # project_name = "gymCopter-Hover3DV24-irp=False-1679299652"
-    project_name = "gymCopter-Hover3DV25-irp=False-1679300804"
-    time_step = 2_000_000
+    # project_name = "gymCopter-Hover3DV25-irp=False-1679300804"
+    project_name = "gymCopter-Hover3DV26-fault-0_75-1679885987"
+    # project_name = "gymCopter-Hover3DV26-fault-0_75-passive-1679889220"
+    # project_name = "gymCopter-Hover3DV27-faultless-1679901288"
+    time_step = 2_800_000
     models_dir = f"models/{project_name}"
     model_path = f"{models_dir}/{time_step}.zip"
 
@@ -55,19 +58,20 @@ def _heuristic(env):
     done = False
 
     steps = 0
+    real_time = 0 / env.FRAMES_PER_SECOND
 
     flip = False
     #
     # states_data = pd.DataFrame(columns=["time_step", "x", "y", "z", "phi", "theta", "psi"])
     # states_data = states_data.append([steps, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]], ignore_index=True)
 
-    states_data = pd.DataFrame(columns=["time_step", "x", "y", "z", "phi", "theta", "psi"])
+    states_data = pd.DataFrame(columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
 
-    new_df = pd.DataFrame([[steps, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
-                          columns=["time_step", "x", "y", "z", "phi", "theta", "psi"])
+    new_df = pd.DataFrame([[steps, real_time, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
+                          columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
     states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
 
-    while not done:
+    while not done and steps < 20000:
         action, _ = model.predict(obs)
 
         # if env.total_reward > 500:
@@ -82,23 +86,25 @@ def _heuristic(env):
 
         sleep(1. / env.FRAMES_PER_SECOND)
         steps += 1
+        real_time = steps / env.FRAMES_PER_SECOND
 
-        new_df = pd.DataFrame([[steps, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
-                              columns=["time_step", "x", "y", "z", "phi", "theta", "psi"])
+        new_df = pd.DataFrame([[steps, real_time, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
+                              columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
         states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
 
     print(env.total_reward)
     env.close()
 
-    # states_data.to_csv('states_data_hover3dV19.csv', index=False)
+    states_data.to_csv('data/data_Hover3DV26-fault-0_75.csv', index=False)
+
 
 
 def main():
-    episodes = 3
+    episodes = 5
 
     for ep in range(episodes):
         # input("Press enter in the command window to continue.....")
-        env = gym.make("gym_copter:Hover3D-v25")
+        env = gym.make("gym_copter:Hover3D-v26")
         env.reset()
 
         viewer = ThreeDHoverRenderer(env,
