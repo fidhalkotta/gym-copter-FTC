@@ -236,6 +236,13 @@ register(
     max_episode_steps=20000
 )
 
+# 3D hover V28: Same as V26, but variable sigmas
+register(
+    id='Hover3D-v28',
+    entry_point='gym_copter.envs:Hover3DV28',
+    max_episode_steps=20000
+)
+
 
 
 

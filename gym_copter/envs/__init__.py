@@ -45,6 +45,7 @@ from gym_copter.envs.hover3dV25 import Hover3DV25
 # Wrong bodyToInertial Function
 from gym_copter.envs.hover3dV26 import Hover3DV26
 from gym_copter.envs.hover3dV27 import Hover3DV27
+from gym_copter.envs.hover3dV28 import Hover3DV28
 
 
 

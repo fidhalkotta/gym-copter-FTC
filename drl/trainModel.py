@@ -7,12 +7,13 @@ import os
 import time
 print("Setting up envs and models")
 
-env = gym.make("gym_copter:Hover3D-v27")
+env = gym.make("gym_copter:Hover3D-v28",
+               position_sigma=0.5, attitude_sigma=(np.pi/5))
 env.reset()
 
 print("Setting Names")
 
-project_name = f"gymCopter-Hover3DV27-faultless-{int(time.time())}"
+project_name = f"gymCopter-Hover3DV28-fault-0_5-passive-p_sigma-0_5-a_sigma-0_2-{int(time.time())}"
 models_dir = f"models/{project_name}"
 
 logdir = "logs"

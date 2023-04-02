@@ -42,10 +42,23 @@ def _heuristic(env):
     # project_name = "gymCopter-Hover3DV23-irp=False-1678962852"
     # project_name = "gymCopter-Hover3DV24-irp=False-1679299652"
     # project_name = "gymCopter-Hover3DV25-irp=False-1679300804"
-    project_name = "gymCopter-Hover3DV26-fault-0_75-1679885987"
+    # project_name = "gymCopter-Hover3DV26-fault-0_75-1679885987"
     # project_name = "gymCopter-Hover3DV26-fault-0_75-passive-1679889220"
     # project_name = "gymCopter-Hover3DV27-faultless-1679901288"
-    time_step = 2_800_000
+
+    # VERY GOOD ALWAYS FAULTY ONE BELOW
+    # project_name = "gymCopter-Hover3DV28-fault-0_75-active-p_sigma-4-a_sigma-0_2-1680332126"
+
+    # project_name = "gymCopter-Hover3DV28-fault-0_75-active-p_sigma-0_5-a_sigma-0_2-1680333567" # 3_000_000
+
+    # Very very good passive faulty below
+    # project_name = "gymCopter-Hover3DV28-fault-0_75-passive-p_sigma-0_5-a_sigma-0_2-1680339074" # 1_600_00
+
+    # project_name = "gymCopter-Hover3DV28-fault-0_6-passive-p_sigma-0_5-a_sigma-0_2-1680344215"
+
+    project_name = "gymCopter-Hover3DV28-fault-0_5-passive-p_sigma-0_5-a_sigma-0_2-1680352502"
+
+    time_step = 3_800_000
     models_dir = f"models/{project_name}"
     model_path = f"{models_dir}/{time_step}.zip"
 
@@ -82,6 +95,7 @@ def _heuristic(env):
         obs, reward, done, _ = env.step(action)
 
         print('(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (obs[0], obs[2], obs[4], obs[6], obs[8], obs[10], steps, reward, env.total_reward))
+        # print(env.fault_map)
         env.render()
 
         sleep(1. / env.FRAMES_PER_SECOND)
@@ -95,16 +109,17 @@ def _heuristic(env):
     print(env.total_reward)
     env.close()
 
-    states_data.to_csv('data/data_Hover3DV26-fault-0_75.csv', index=False)
+    # states_data.to_csv('data/data_Hover3DV26-fault-0_75.csv', index=False)
 
 
 
 def main():
-    episodes = 5
+    episodes = 3
 
     for ep in range(episodes):
         # input("Press enter in the command window to continue.....")
-        env = gym.make("gym_copter:Hover3D-v26")
+        env = gym.make("gym_copter:Hover3D-v28",
+                       position_sigma=0.5, attitude_sigma=(np.pi / 5))
         env.reset()
 
         viewer = ThreeDHoverRenderer(env,

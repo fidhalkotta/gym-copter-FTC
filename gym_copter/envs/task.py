@@ -146,6 +146,7 @@ class _Task(gym.Env, EzPickle):
 
         # Don't run forever!
         if self.steps == self.max_steps:
+            # reward *= 10
             self.done = True
         self.steps += 1
 
@@ -233,7 +234,7 @@ class _Task(gym.Env, EzPickle):
         self.states = [initial_state]
         self.plotter = Plotter()
 
-        self.fault_map = [0.75, 1, 1, 1]
+        self.fault_map = [1, 1, 1, 1]
 
         if random.randint(0, 1) == 1:
             self.fault_map = self.fault_magnitude
