@@ -42,6 +42,9 @@ class _Vehicle:
 
     def __init__(self, ax, showtraj, color='b'):
 
+        # Plot Target point
+        ax.scatter(0, 0, 5, c='orange', marker='+', s=50)
+
         self.traj_line = _create_line3d(ax, color)
 
         self.arms_lines = [_create_line3d(ax, color) for j in range(4)]
