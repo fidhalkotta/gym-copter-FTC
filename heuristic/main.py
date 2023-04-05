@@ -20,12 +20,18 @@ from gym_copter.cmdline import (make_parser, make_parser_3d,
 def _demo_heuristic(env, fun, pidcontrollers,
                     seed=None, csvfilename=None, nopid=False):
 
+    project_name = "gymCopter-Hover3DV28-fault-0_75-PID"
+
+    save_data = False
+    save_data_steps_limit = 5_000
+
     env.seed(seed)
     np.random.seed(seed)
 
     steps = 0
     real_time = 0 / env.FRAMES_PER_SECOND
     obs = env.reset()
+    env.set_fault_state(True)
     done = False
     flip = False
 
@@ -40,14 +46,16 @@ def _demo_heuristic(env, fun, pidcontrollers,
                                       for k in range(1, actsize+1)]))
         csvfile.write(',' + ','.join(env.STATE_NAMES) + '\n')
 
+    if save_data:
+        f = open(f"../drl/data/{project_name}-faulty.csv", "w")
 
-    states_data = pd.DataFrame(columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
+        states_data = pd.DataFrame(columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
 
-    new_df = pd.DataFrame([[steps, real_time, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
-                          columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
-    states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
+        new_df = pd.DataFrame([[steps, real_time, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
+                              columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
+        states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
 
-    while not done and steps < 2000:
+    while not done:
         action = np.zeros(actsize) if nopid else fun(obs, pidcontrollers)
         action = list(action)
 
@@ -58,13 +66,13 @@ def _demo_heuristic(env, fun, pidcontrollers,
 
         obs, reward, done, _ = env.step(action)
 
-        if csvfile is not None:
-
-            csvfile.write('%f' % (dt * steps))
-
-            csvfile.write((',%f' * actsize) % tuple(action))
-
-            csvfile.write(((',%f' * len(obs)) + '\n') % tuple(obs))
+        # if csvfile is not None:
+        #
+        #     csvfile.write('%f' % (dt * steps))
+        #
+        #     csvfile.write((',%f' * actsize) % tuple(action))
+        #
+        #     csvfile.write(((',%f' * len(obs)) + '\n') % tuple(obs))
 
         env.render()
 
@@ -76,11 +84,17 @@ def _demo_heuristic(env, fun, pidcontrollers,
         steps += 1
         real_time = steps / env.FRAMES_PER_SECOND
 
-        new_df = pd.DataFrame([[steps, real_time, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
-                              columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
-        states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
+        if save_data:
+            new_df = pd.DataFrame([[steps, real_time, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
+                                  columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
+            states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
 
-    states_data.to_csv('data_Hover3DV26-fault-0_75-PID.csv', index=False)
+            if steps > save_data_steps_limit:
+                done = True
+
+
+    if save_data:
+        states_data.to_csv(f"../drl/data/{project_name}-faulty.csv", index=False)
 
     env.close()
 

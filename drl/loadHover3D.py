@@ -52,22 +52,25 @@ def _heuristic(env):
     # project_name = "gymCopter-Hover3DV28-fault-0_75-active-p_sigma-0_5-a_sigma-0_2-1680333567" # 3_000_000
 
     # Very very good passive faulty below
-    # project_name = "gymCopter-Hover3DV28-fault-0_75-passive-p_sigma-0_5-a_sigma-0_2-1680339074" # 1_600_00
+    project_name = "gymCopter-Hover3DV28-fault-0_75-passive-p_sigma-0_5-a_sigma-0_2-1680339074" # 1_600_00
 
     # project_name = "gymCopter-Hover3DV28-fault-0_6-passive-p_sigma-0_5-a_sigma-0_2-1680344215"
 
-    project_name = "gymCopter-Hover3DV28-fault-0_5-passive-p_sigma-0_5-a_sigma-0_2-1680352502"
+    # project_name = "gymCopter-Hover3DV28-fault-0_5-passive-p_sigma-0_5-a_sigma-0_2-1680352502"
 
-    time_step = 3_800_000
+    time_step = 1_600_000
     models_dir = f"models/{project_name}"
     model_path = f"{models_dir}/{time_step}.zip"
+
+    save_data = False
+    save_data_steps_limit = 5_000
 
     print(f"Project Name: {project_name}\nTimeStep: {time_step}")
 
     model = PPO.load(model_path, env=env)
 
     obs = env.reset()
-    env.set_fault_state(True)
+    env.set_fault_state(False)
     done = False
 
     steps = 0
@@ -78,13 +81,18 @@ def _heuristic(env):
     # states_data = pd.DataFrame(columns=["time_step", "x", "y", "z", "phi", "theta", "psi"])
     # states_data = states_data.append([steps, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]], ignore_index=True)
 
-    states_data = pd.DataFrame(columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
+    if save_data:
+        f = open(f"data/{project_name}-faulty.csv", "w")
 
-    new_df = pd.DataFrame([[steps, real_time, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
-                          columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
-    states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
+        states_data = pd.DataFrame(columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
 
-    while not done and steps < 20000:
+        new_df = pd.DataFrame([[steps, real_time, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
+                              columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
+        states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
+
+
+    print(env.fault_map)
+    while not done:
         action, _ = model.predict(obs)
 
         # if env.total_reward > 500:
@@ -102,19 +110,25 @@ def _heuristic(env):
         steps += 1
         real_time = steps / env.FRAMES_PER_SECOND
 
-        new_df = pd.DataFrame([[steps, real_time, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
-                              columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
-        states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
+        if save_data:
+            new_df = pd.DataFrame([[steps, real_time, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
+                                  columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
+            states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
+
+            if steps > save_data_steps_limit:
+                done = True
 
     print(env.total_reward)
+    print(env.fault_map)
     env.close()
 
-    # states_data.to_csv('data/data_Hover3DV26-fault-0_75.csv', index=False)
+    if save_data:
+        states_data.to_csv(f"data/{project_name}-faulty.csv", index=False)
 
 
 
 def main():
-    episodes = 3
+    episodes = 1
 
     for ep in range(episodes):
         # input("Press enter in the command window to continue.....")

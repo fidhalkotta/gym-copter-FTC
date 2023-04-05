@@ -72,7 +72,7 @@ class Hover3DV28(_Hover, _ThreeD):
         # For generating plots
         self.plot = False
 
-        self.fault_magnitude = [0.5, 1, 1, 1]
+        self.fault_magnitude = [0.75, 1, 1, 1]
 
         self.position_sigma = position_sigma
         self.attitude_sigma = attitude_sigma
