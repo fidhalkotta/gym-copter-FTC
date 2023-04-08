@@ -51,26 +51,28 @@ def _heuristic(env):
 
     # project_name = "gymCopter-Hover3DV28-fault-0_75-active-p_sigma-0_5-a_sigma-0_2-1680333567" # 3_000_000
 
-    # Very very good passive faulty below
-    project_name = "gymCopter-Hover3DV28-fault-0_75-passive-p_sigma-0_5-a_sigma-0_2-1680339074" # 1_600_00
+    # Very very good passive faulty 0.75 below
+    project_name = "gymCopter-Hover3DV28-fault-0_75-passive-p_sigma-0_5-a_sigma-0_2-1680339074"  # 1_600_00
 
     # project_name = "gymCopter-Hover3DV28-fault-0_6-passive-p_sigma-0_5-a_sigma-0_2-1680344215"
-
     # project_name = "gymCopter-Hover3DV28-fault-0_5-passive-p_sigma-0_5-a_sigma-0_2-1680352502"
+    project_name = "V29-RL-fault-0_75-passive-p_sigma-0_5-a_sigma-0_2-wind_power-1_0-1680783457"
 
-    time_step = 1_600_000
+
+    time_step = 2_200_000
     models_dir = f"models/{project_name}"
     model_path = f"{models_dir}/{time_step}.zip"
 
     save_data = False
     save_data_steps_limit = 5_000
+    save_data_file_name = f"data/{project_name}-nominal.csv"
 
     print(f"Project Name: {project_name}\nTimeStep: {time_step}")
 
     model = PPO.load(model_path, env=env)
 
     obs = env.reset()
-    env.set_fault_state(False)
+    env.set_fault_state(True)
     done = False
 
     steps = 0
@@ -82,14 +84,13 @@ def _heuristic(env):
     # states_data = states_data.append([steps, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]], ignore_index=True)
 
     if save_data:
-        f = open(f"data/{project_name}-faulty.csv", "w")
+        f = open(save_data_file_name, "w")
 
         states_data = pd.DataFrame(columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
 
         new_df = pd.DataFrame([[steps, real_time, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
                               columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
         states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
-
 
     print(env.fault_map)
     while not done:
@@ -102,7 +103,9 @@ def _heuristic(env):
 
         obs, reward, done, _ = env.step(action)
 
-        print('(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (obs[0], obs[2], obs[4], obs[6], obs[8], obs[10], steps, reward, env.total_reward))
+        print(
+            '(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (
+            obs[0], obs[2], obs[4], obs[6], obs[8], obs[10], steps, reward, env.total_reward))
         # print(env.fault_map)
         env.render()
 
@@ -111,7 +114,7 @@ def _heuristic(env):
         real_time = steps / env.FRAMES_PER_SECOND
 
         if save_data:
-            new_df = pd.DataFrame([[steps, real_time, obs[0], obs[2], obs[4], obs[6], obs[8], obs[10]]],
+            new_df = pd.DataFrame([[steps, real_time, obs[0] , obs[2], obs[4], obs[6], obs[8], obs[10]]],
                                   columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
             states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
 
@@ -123,8 +126,7 @@ def _heuristic(env):
     env.close()
 
     if save_data:
-        states_data.to_csv(f"data/{project_name}-faulty.csv", index=False)
-
+        states_data.to_csv(save_data_file_name, index=False)
 
 
 def main():
@@ -132,7 +134,7 @@ def main():
 
     for ep in range(episodes):
         # input("Press enter in the command window to continue.....")
-        env = gym.make("gym_copter:Hover3D-v28",
+        env = gym.make("gym_copter:Hover3D-v29",
                        position_sigma=0.5, attitude_sigma=(np.pi / 5))
         env.reset()
 
@@ -141,5 +143,6 @@ def main():
                                      ())
 
         viewer.start()
+
 
 main()

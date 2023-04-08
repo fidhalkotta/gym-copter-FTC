@@ -20,10 +20,11 @@ from gym_copter.cmdline import (make_parser, make_parser_3d,
 def _demo_heuristic(env, fun, pidcontrollers,
                     seed=None, csvfilename=None, nopid=False):
 
-    project_name = "gymCopter-Hover3DV28-fault-0_75-PID"
+    project_name = "gymCopter-Hover3DV28-PID"
 
     save_data = False
     save_data_steps_limit = 5_000
+    save_data_file_name = f"../drl/data/{project_name}-nominal.csv"
 
     env.seed(seed)
     np.random.seed(seed)
@@ -47,7 +48,7 @@ def _demo_heuristic(env, fun, pidcontrollers,
         csvfile.write(',' + ','.join(env.STATE_NAMES) + '\n')
 
     if save_data:
-        f = open(f"../drl/data/{project_name}-faulty.csv", "w")
+        f = open(save_data_file_name, "w")
 
         states_data = pd.DataFrame(columns=["time_step", "real_time", "x", "y", "z", "phi", "theta", "psi"])
 
@@ -77,6 +78,7 @@ def _demo_heuristic(env, fun, pidcontrollers,
         env.render()
 
         sleep(1./env.FRAMES_PER_SECOND)
+        sleep(0.1)
 
         print(
             '(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (obs[0], obs[2], obs[4], obs[6], obs[8], obs[10], steps, reward, env.total_reward))
@@ -94,7 +96,7 @@ def _demo_heuristic(env, fun, pidcontrollers,
 
 
     if save_data:
-        states_data.to_csv(f"../drl/data/{project_name}-faulty.csv", index=False)
+        states_data.to_csv(save_data_file_name, index=False)
 
     env.close()
 

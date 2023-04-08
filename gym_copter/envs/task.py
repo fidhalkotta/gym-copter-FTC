@@ -38,7 +38,9 @@ class _Task(gym.Env, EzPickle):
                  max_angle=45,
                  bounds=10,
                  initial_altitude=5,
-                 initial_random_position=True):
+                 initial_random_position=True,
+                 enable_wind=False,
+                 wind_power=1.0):
 
         EzPickle.__init__(self)
         self.seed()
@@ -76,6 +78,16 @@ class _Task(gym.Env, EzPickle):
 
         self.states = []
 
+        # Initialize wind parameters
+        self.enable_wind = enable_wind
+        self.wind_idx = np.array([
+            np.random.randint(-9999, 9999),
+            np.random.randint(-9999, 9999),
+            np.random.randint(-9999, 9999)
+        ])
+
+        self.wind_power = wind_power
+
     def set_altitude(self, altitude):
 
         self.initial_altitude = altitude
@@ -93,6 +105,30 @@ class _Task(gym.Env, EzPickle):
         status = d.getStatus()
 
         motors = np.zeros(4)
+
+        if self.enable_wind:
+            # the function used for wind is tanh(sin(2 k x) + sin(pi k x)),
+            # which is proven to never be periodic, k = 0.01
+            # The smaller the k, the gentler the change in wind force
+            k = 0.01
+
+            wind_mag = (
+                np.tanh(
+                    np.sin(2 * k * self.wind_idx)
+                    + (np.sin(math.pi * k * self.wind_idx))
+                )
+                * self.wind_power
+            )
+            self.wind_idx += 1
+
+            perturbation = (wind_mag[0],  # X
+                            wind_mag[1],  # Y
+                            wind_mag[2],  # Z
+                            0,                  # phi
+                            0,                  # theta
+                            0)                  # psi
+
+            self.dynamics.perturb(np.array(perturbation))
 
         # Stop motors after safe landing
         if status == d.STATUS_LANDED:

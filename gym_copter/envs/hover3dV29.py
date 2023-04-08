@@ -58,11 +58,12 @@ def _sincos(angles):
     return cph, cth, cps, sph, sth, sps
 
 
-class Hover3DV28(_Hover, _ThreeD):
+class Hover3DV29(_Hover, _ThreeD):
 
     def __init__(self, obs_size=12, position_sigma=3, attitude_sigma=(np.pi/5)):
         _Hover.__init__(self, obs_size, 4, max_steps=20000, out_of_bounds_penalty=100, initial_altitude=8,
-                        initial_random_position=False)
+                        initial_random_position=False,
+                        enable_wind=True)
         _ThreeD.__init__(self)
 
         # For generating CSV file
@@ -149,18 +150,18 @@ class Hover3DV28(_Hover, _ThreeD):
         self.plot = True
 
 
-class HoverVisual(Hover3DV28):
+class HoverVisual(Hover3DV29):
     RES = 16
 
     def __init__(self, vs=VisionSensor(res=RES)):
-        Hover3DV28.__init__(self)
+        Hover3DV29.__init__(self)
 
         self.vs = vs
 
         self.image = None
 
     def step(self, action):
-        result = Hover3DV28.step(self, action)
+        result = Hover3DV29.step(self, action)
 
         x, y, z, phi, theta, psi = self.pose
 

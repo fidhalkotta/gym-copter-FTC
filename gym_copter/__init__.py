@@ -243,6 +243,13 @@ register(
     max_episode_steps=20000
 )
 
+# 3D hover V29: Same as V28, but wind enabled
+register(
+    id='Hover3D-v29',
+    entry_point='gym_copter.envs:Hover3DV29',
+    max_episode_steps=20000
+)
+
 
 
 

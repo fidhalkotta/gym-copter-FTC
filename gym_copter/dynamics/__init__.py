@@ -179,8 +179,9 @@ class Dynamics:
             # Compute the state derivatives using Equation 12
             self._computeStateDerivative(accelNED, netz, U2, U3, U4, Omega)
 
-            # Add instantaneous perturbation
-            self._dxdt[1::2] += self._perturb
+            # Add instantaneous perturbation.
+            # Why add it twice? Already being added in the previous line inside the _computeStateDerivative function
+            # self._dxdt[1::2] += self._perturb
 
             # Compute state as first temporal integral of first temporal
             # derivative
