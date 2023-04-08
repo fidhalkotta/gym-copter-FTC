@@ -68,7 +68,7 @@ plt.style.use(['science', 'grid', 'high-vis'])
 rows = 2
 cols = 3
 
-figure, ax = plt.subplots(rows, cols, figsize=(13, 6.5) ,sharex='row')
+figure, ax = plt.subplots(rows, cols, figsize=(13, 6.5),sharex='row')
 
 i = 0
 

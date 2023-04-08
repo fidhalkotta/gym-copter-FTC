@@ -19,6 +19,7 @@ drl/archive
 
 drl/models
 drl/logs
+drl/test
 
 /.idea
 .DS_Store
