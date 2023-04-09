@@ -16,10 +16,13 @@ gym_copter.egg-info/
 
 
 drl/archive
-
-drl/models
-drl/logs
 drl/test
+
+drl/**/models/
+drl/**/logs
+
+*/models/
+*/logs/
 
 /.idea
 .DS_Store

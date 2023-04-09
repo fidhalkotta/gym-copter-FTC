@@ -30,7 +30,6 @@ if not os.path.exists(logdir):
 model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=logdir)
 
 TIMESTEPS = 200_000
-iters = 0
 
 print("Starting Training")
 for i in range(1, 26):
