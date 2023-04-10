@@ -257,6 +257,14 @@ register(
     max_episode_steps=20000
 )
 
+# Final Experimentation - All have wind and no out of bounds termination
+
+# Model A V1: Negative Squared Error 
+register(
+    id='ModelA-V1',
+    entrypoint='gym_copter.envs:ModelA_V1',
+    max_episode_steps=20_000
+)
 
 
 

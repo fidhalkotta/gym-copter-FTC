@@ -132,10 +132,12 @@ def _heuristic(env):
 def main():
     episodes = 1
 
+    fault_magnitude = [0.75, 1, 1, 1]
+
     for ep in range(episodes):
-        # input("Press enter in the command window to continue.....")
         env = gym.make("gym_copter:Hover3D-v29",
-                       position_sigma=0.5, attitude_sigma=(np.pi / 5))
+                       position_sigma=0.5, attitude_sigma=(np.pi / 5),
+                       fault_magnitude=fault_magnitude)
         env.reset()
 
         viewer = ThreeDHoverRenderer(env,

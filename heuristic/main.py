@@ -78,7 +78,6 @@ def _demo_heuristic(env, fun, pidcontrollers,
         env.render()
 
         sleep(1./env.FRAMES_PER_SECOND)
-        sleep(0.1)
 
         print(
             '(%+0.2f,%+0.2f,%+0.2f) (%+0.2f,%+0.2f,%+0.2f)    steps = %04d    current_reward = %+0.2f    total_reward = %+0.2f' % (obs[0], obs[2], obs[4], obs[6], obs[8], obs[10], steps, reward, env.total_reward))
