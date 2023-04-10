@@ -52,7 +52,7 @@ def _heuristic(env):
     # project_name = "gymCopter-Hover3DV28-fault-0_75-active-p_sigma-0_5-a_sigma-0_2-1680333567" # 3_000_000
 
     # Very very good passive faulty 0.75 below
-    project_name = "gymCopter-Hover3DV28-fault-0_75-passive-p_sigma-0_5-a_sigma-0_2-1680339074"  # 1_600_00
+    # project_name = "gymCopter-Hover3DV28-fault-0_75-passive-p_sigma-0_5-a_sigma-0_2-1680339074"  # 1_600_00
 
     # project_name = "gymCopter-Hover3DV28-fault-0_6-passive-p_sigma-0_5-a_sigma-0_2-1680344215"
     # project_name = "gymCopter-Hover3DV28-fault-0_5-passive-p_sigma-0_5-a_sigma-0_2-1680352502"

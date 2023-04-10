@@ -250,6 +250,13 @@ register(
     max_episode_steps=20000
 )
 
+# 3D hover V23: Same as V29 but terminate on out of bounds and lose bigely
+register(
+    id='Hover3D-v30',
+    entry_point='gym_copter.envs:Hover3DV30',
+    max_episode_steps=20000
+)
+
 
 
 

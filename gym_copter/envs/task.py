@@ -159,7 +159,7 @@ class _Task(gym.Env, EzPickle):
 
         reward = self._get_reward(status, state, d, x, y)
 
-        # Lose bigly if we go outside window
+        # # Lose bigly if we go outside window
         # if abs(x) >= self.bounds or abs(y) >= self.bounds or abs(z) >= self.bounds or z >= 0:
         #     self.done = True
         #     reward -= self.out_of_bounds_penalty
