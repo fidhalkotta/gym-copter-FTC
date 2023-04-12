@@ -51,6 +51,7 @@ from gym_copter.envs.archive.hover3dV30 import Hover3DV30
 
 # Final Experimentation - All have wind and no out of bounds termination
 from gym_copter.envs.models.modelA.modelA_V1 import ModelA_V1
+from gym_copter.envs.models.modelA.modelA_V2 import ModelA_V2 # THIS ONE DOES HAVE TERMINATION ON BOUNDS
 
 
 

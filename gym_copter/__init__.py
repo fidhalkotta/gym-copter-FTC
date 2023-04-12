@@ -259,10 +259,17 @@ register(
 
 # Final Experimentation - All have wind and no out of bounds termination
 
-# Model A V1: Negative Squared Error 
+# Model A V1: Negative Squared Error
 register(
-    id='ModelA-V1',
-    entrypoint='gym_copter.envs:ModelA_V1',
+    id='ModelA-v1',
+    entry_point='gym_copter.envs:ModelA_V1',
+    max_episode_steps=20_000
+)
+
+# Model A V2: Negative Squared Error with termination on bounds
+register(
+    id='ModelA-v2',
+    entry_point='gym_copter.envs:ModelA_V2',
     max_episode_steps=20_000
 )
 

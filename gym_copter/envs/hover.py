@@ -15,7 +15,7 @@ class _Hover(_Task):
     def __init__(self, observation_size, action_size,
                  initial_random_position=True,
                  max_steps=1000,
-                 out_of_bounds_penalty=20000,
+                 out_of_bounds_penalty=0,
                  initial_altitude=8,
                  enable_wind=False):
 

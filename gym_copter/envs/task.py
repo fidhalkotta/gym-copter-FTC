@@ -33,7 +33,7 @@ class _Task(gym.Env, EzPickle):
 
     def __init__(self, observation_size, action_size,
                  initial_random_force=30,
-                 out_of_bounds_penalty=20000,
+                 out_of_bounds_penalty=0,
                  max_steps=1000,
                  max_angle=45,
                  bounds=10,
@@ -73,6 +73,7 @@ class _Task(gym.Env, EzPickle):
         self.total_reward = 0
 
         # Initialize fault map to no faults
+        self.enable_passive_faults = False
         self.fault_map = [1, 1, 1, 1]
         self.fault_magnitude = [1, 1, 1, 1]
 
@@ -166,6 +167,7 @@ class _Task(gym.Env, EzPickle):
 
         if z >= 0:
             self.done = True
+            reward -= self.out_of_bounds_penalty
 
         # # Lose bigly for excess roll or pitch
         # elif abs(phi) >= self.max_angle or abs(theta) >= self.max_angle:
@@ -272,11 +274,12 @@ class _Task(gym.Env, EzPickle):
 
         self.fault_map = [1, 1, 1, 1]
 
-        if random.randint(0, 1) == 1:
-            self.fault_map = self.fault_magnitude
+        if self.enable_passive_faults:
+            if random.randint(0, 1) == 1:
+                self.fault_map = self.fault_magnitude
 
-            if self.viewer:
-                self.viewer.flip_fault_state()
+                if self.viewer:
+                    self.viewer.flip_fault_state()
 
         # Return initial state
         return initial_state

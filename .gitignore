@@ -1,9 +1,11 @@
 *.*#
 *.pkl
 *.swp
-*.mp4
 *.csv
 *.pyc
+
+**/videos/*.mov
+
 
 
 __pycache__/
