@@ -32,7 +32,7 @@ def _demo_heuristic(env, fun, pidcontrollers,
     steps = 0
     real_time = 0 / env.FRAMES_PER_SECOND
     obs = env.reset()
-    env.set_fault_state(True)
+    env.set_fault_state(False)
     done = False
     flip = False
 

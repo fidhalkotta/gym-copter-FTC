@@ -136,8 +136,7 @@ def main():
 
     for ep in range(episodes):
         env = gym.make("gym_copter:Hover3D-v29",
-                       position_sigma=0.5, attitude_sigma=(np.pi / 5),
-                       fault_magnitude=fault_magnitude)
+                       position_sigma=0.5, attitude_sigma=(np.pi / 5),)
         env.reset()
 
         viewer = ThreeDHoverRenderer(env,

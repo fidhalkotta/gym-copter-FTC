@@ -164,7 +164,7 @@ class ThreeDRenderer:
         self.outfile = outfile
         if self.outfile is not None:
             Writer = animation.writers['ffmpeg']
-            self.writer = Writer(fps=15,  # works better than self.fps
+            self.writer = Writer(fps=50,  # works better than self.fps
                                  metadata=dict(artist='Me'),
                                  bitrate=1800)
 

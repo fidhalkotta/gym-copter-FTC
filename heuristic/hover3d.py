@@ -61,10 +61,9 @@ def main():
                       AltitudeHoldPidController()
                      )
 
-    demo3d('gym_copter:Hover3D-v30', heuristic,
+    demo3d('gym_copter:Hover3D-v29', heuristic,
            pidcontrollers, ThreeDHoverRenderer)
 
 
 if __name__ == '__main__':
-
     main()

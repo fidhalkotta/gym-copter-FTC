@@ -8,7 +8,7 @@ from gym_copter.rendering.threed import ThreeDHoverRenderer
 
 def main():
     for _ in range(1):
-        env = gym.make("gym_copter:Hover3D-v10")
+        env = gym.make("gym_copter:ModelA-v1")
 
         seed = 42
 

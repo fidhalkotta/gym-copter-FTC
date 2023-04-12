@@ -73,7 +73,7 @@ class Hover3DV29(_Hover, _ThreeD):
         # For generating plots
         self.plot = False
 
-        self.fault_magnitude = [0.75, 1, 1, 1]
+        self.fault_magnitude = [1, 1, 0.75, 1]
 
         # self.fault_cases = [
         #     [1, 1, 1, 1],

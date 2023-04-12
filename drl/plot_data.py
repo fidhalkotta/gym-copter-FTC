@@ -99,7 +99,7 @@ for row in range(rows):
 
 plt.suptitle("Position and Attitude Response of Model $A$ with $m_1 = 0.75$ and $m_2 = m_3 = m_4 = 1$")
 
-plt.savefig('images/Hover3DV28-fault-0_75-passive-faulty.png', dpi=300)
+# plt.savefig('images/Hover3DV28-fault-0_75-passive-faulty.png', dpi=300)
 plt.show()
 
 print("Closing Plots")

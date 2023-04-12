@@ -210,7 +210,7 @@ class ThreeDRenderer:
         if self.outfile is not None:
             Writer = animation.writers['ffmpeg']
             self.writer = Writer(fps=15,  # works better than self.fps
-                                 metadata=dict(artist='Me'),
+                                 metadata=dict(artist='Fidhal Kotta'),
                                  bitrate=1800)
 
         # Set title to name of environment
