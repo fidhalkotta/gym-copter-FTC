@@ -9,7 +9,7 @@ def main():
     total_runs = 1
     print(f"I will train {total_runs} runs")
 
-    starting_index = 3
+    starting_index = 4
 
     for run in range(starting_index, total_runs + starting_index):
         print(f"Training run {run}")

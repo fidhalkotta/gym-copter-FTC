@@ -15,9 +15,9 @@ from gym_copter.rendering.threed import ThreeDHoverRenderer
 
 
 def _heuristic(env):
-    project_name = "ModelA_V1_2,run_1"
+    project_name = "ModelA_V2_1,run_1"
 
-    time_step = 2_200_000
+    time_step = 5_000_000
     models_dir = f"models/{project_name}"
     model_path = f"{models_dir}/{time_step}.zip"
 
@@ -86,7 +86,7 @@ def main():
         fault_magnitude = [1, 1, 1, 1]
         weights = (0.1, 0.1, 0.5, 0.1, 0.1, 0.1)
 
-        env = gym.make("gym_copter:ModelA-v1",
+        env = gym.make("gym_copter:ModelA-v2",
                        fault_magnitude=fault_magnitude,
                        weights=weights,
                        )
