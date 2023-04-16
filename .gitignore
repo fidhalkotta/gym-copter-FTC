@@ -26,5 +26,7 @@ drl/**/logs
 */models/
 */logs/
 
+drl/**/cmaps/*
+
 /.idea
 .DS_Store

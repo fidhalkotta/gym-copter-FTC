@@ -273,6 +273,13 @@ register(
     max_episode_steps=20_000
 )
 
+# Model B V1: Gaussian Distribution
+register(
+    id='ModelB-v1',
+    entry_point='gym_copter.envs:ModelB_V1',
+    max_episode_steps=20_000
+)
+
 
 
 
