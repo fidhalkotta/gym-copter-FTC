@@ -1,8 +1,8 @@
-
+<img src="media/RL-ModelB.2-faulty.gif" height="300">
 
 # Fault Tolerant Quadcopter Control using Reinforcement Learning
 
-<img src="media/RL-ModelB.2-faulty.gif" height="200">
+
 
 OpenAI Gym environment for fault tolerant control of a quadcopter using Stable-Baselines3, extended on top of [gym-copter](https://github.com/simondlevy/gym-copter). Repository includes data processing and graphic generation. 
  
