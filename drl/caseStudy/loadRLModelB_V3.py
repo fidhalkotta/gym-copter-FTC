@@ -15,32 +15,40 @@ from gym_copter.rendering.threed import ThreeDHoverRenderer
 
 
 def _heuristic(env):
-    # project_name = "ModelB_V1_1,position_sigma_7_5,attitude_sigma_3_14159,run_1"  # 2_400_000 - crashes after around 2000 timesteps,
-    # project_name = "ModelB_V1_1,position_sigma_3,attitude_sigma_3_14159,run_1"  # 3_000_000 - HITS 20,000, oscillates and kinda orbits in a patterns around the target below the point
-    # project_name = "ModelB_V1_1,position_sigma_2,attitude_sigma_3_14159,run_1"  # 2_800_000 - good sometimes
-    # project_name = "ModelB_V1_1,position_sigma_2,attitude_sigma_1_5708,run_1"  # 4_200_000 - really goood sometimes. like hits 20,000, very stable.
-    # project_name = "ModelB_V1_1,position_sigma_1,attitude_sigma_1_0472,run_1"  # 2_200_000 - think its pretty good? bit wibbly but wil not fail, aACTUALLY JUST CRASHED AT 6000
-    # project_name = "ModelB_V1_1,position_sigma_0_5,attitude_sigma_0_62832,run_1"  # 5_000_000   - highest peak in reward, decent sometimes
-    # project_name = "ModelB_V1_1,position_sigma_3,attitude_sigma_1_5708,run_1"  # 2_400_000   -
+    project_name = "ModelB_V3_1,fmi_0_75,run_1"  # 3_000_000
 
-    project_name = "ModelB_V1_1,position_sigma_0_25,attitude_sigma_0_62832,run_1"  # 2_200_000 - BEST BY FAR - works with 0.85 fault pretty much always, and with 0.75 works 1 out of 3 times
+    # 2_400_000  - nominal and fm 0,1,3 = faulty, it works amazing!, fm2 it doesnt work
+    # 3_000_000  - nominal is amzing - it just about does all of them, like stays alive, doesnt alwyas be in the middle, but does do all of them
+
+    # project_name = "ModelB_V3_1,fmi_0_75,run_3"
+    #
+    # 1_600_000  - also doesnt really work for any of them
+    # 2_800_000  - doesnt really work for any of them lol
+    #
+    # project_name = "ModelB_V3_1,fmi_0_65,run_2"
+    #
+    # 3_000_000 - doesnt work at fmi= 0.65
 
 
-    time_step = 2_000_000
+    # ===== B1 ===== #
+
+    # project_name = "ModelB_V1_1,position_sigma_0_25,attitude_sigma_0_62832,run_1"
+
+    time_step = 3_000_000
     models_dir = f"models/{project_name}"
     model_path = f"{models_dir}/{time_step}.zip"
 
     save_data = True
     save_data_steps_limit = 6_000
-    save_data_file_name = f"data/RL-{project_name}-{time_step}.csv"
+    save_data_file_name = f"data/RL-{project_name}-{time_step}-Case5-ftilde_0_60.csv"
 
     print(f"Project Name: {project_name}\nTimeStep: {time_step}")
 
     model = PPO.load(model_path, env=env)
 
     obs = env.reset()
-    # sleep(2)
-    env.set_fault_state(True)
+    sleep(2)
+    env.set_fault_state([1, 1, 1, 0.6])
     done = False
 
     steps = 0
@@ -80,8 +88,8 @@ def _heuristic(env):
             if steps > save_data_steps_limit:
                 done = True
 
-    print(env.total_reward)
-    print(env.fault_map)
+    # print(f'TOTAL REWARD:{env.total_reward}')
+    # print(env.fault_map)
     env.close()
 
     if save_data:
@@ -92,12 +100,19 @@ def main():
     episodes = 1
 
     for ep in range(episodes):
-        fault_magnitude = [1, 1, 1, 1]
-        weights = (0.1, 0.1, 0.5, 0.1, 0.1, 0.1)
 
-        env = gym.make("gym_copter:ModelB-v1",
-                       fault_magnitude=fault_magnitude,
-                       weights=weights,
+        f_i = 0.75
+
+        fault_cases = [
+                [1, 1, 1, 1],
+                [f_i, 1, 1, 1],
+                [1, f_i, 1, 1],
+                [1, 1, f_i, 1],
+                [1, 1, 1, f_i],
+        ]
+
+        env = gym.make("gym_copter:ModelB-v3",
+                       fault_cases=fault_cases,
                        )
         env.reset()
 

@@ -55,16 +55,16 @@ def heuristic(state, pidcontrollers):
 
 def _demo_heuristic(env, fun, pidcontrollers):
 
-    project_name = "ModelB_V1_1"
+    project_name = "ModelB_V3_1"
 
     save_data = False
     save_data_steps_limit = 6_000
-    save_data_file_name = f"data/PID-{project_name}.csv"
+    save_data_file_name = f"data/PID-{project_name}-Case5.csv"
 
     print(f"Project Name: {project_name}\nTimeStep: N/A")
 
     obs = env.reset()
-    env.set_fault_state(False)
+    env.set_fault_state([1, 1, 1, 0.75])
     done = False
 
     steps = 0
@@ -82,6 +82,7 @@ def _demo_heuristic(env, fun, pidcontrollers):
         states_data = pd.concat([states_data, new_df], axis=0, ignore_index=True)
 
     print(env.fault_map)
+    sleep(2)
     while not done:
         action = fun(obs, pidcontrollers)
         action = list(action)
@@ -132,8 +133,20 @@ def demo(envname, heuristic, pidcontrollers):
 
 
 def demo3d(envname, heuristic, pidcontrollers, renderer):
+    f_i = 0.75
 
-    env = gym.make(envname)
+    fault_cases = [
+        [1, 1, 1, 1],
+        [f_i, 1, 1, 1],
+        [1, f_i, 1, 1],
+        [1, 1, f_i, 1],
+        [1, 1, 1, f_i],
+    ]
+
+    env = gym.make(envname,
+                   fault_cases=fault_cases,
+                   )
+    env.reset()
 
     parser = make_parser_3d()
 
@@ -169,7 +182,7 @@ def main():
                       AltitudeHoldPidController()
                      )
 
-    demo3d('gym_copter:ModelB-v1', heuristic,
+    demo3d('gym_copter:ModelB-v3', heuristic,
            pidcontrollers, ThreeDHoverRenderer)
 
 

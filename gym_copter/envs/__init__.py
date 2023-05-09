@@ -55,6 +55,7 @@ from gym_copter.envs.models.modelA.modelA_V2 import ModelA_V2  # THIS ONE DOES H
 
 from gym_copter.envs.models.modelB.modelB_V1 import ModelB_V1
 
-
+from gym_copter.envs.models.modelB.modelB_V2 import ModelB_V2  # Passive FTC
+from gym_copter.envs.models.modelB.modelB_V3 import ModelB_V3  # Passive FTC
 
 print("Initialised ENVS")

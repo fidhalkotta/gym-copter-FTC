@@ -280,6 +280,19 @@ register(
     max_episode_steps=20_000
 )
 
+# Model B V2: Passive Fault Training
+register(
+    id='ModelB-v2',
+    entry_point='gym_copter.envs:ModelB_V2',
+    max_episode_steps=20_000
+)
+
+# Model B V3: Passive Fault Training - with multiple fault cases
+register(
+    id='ModelB-v3',
+    entry_point='gym_copter.envs:ModelB_V3',
+    max_episode_steps=20_000
+)
 
 
 

@@ -274,12 +274,12 @@ class _Task(gym.Env, EzPickle):
 
         self.fault_map = [1, 1, 1, 1]
 
-        if self.enable_passive_faults:
-            if random.randint(0, 1) == 1:
-                self.fault_map = self.fault_magnitude
-
-                if self.viewer:
-                    self.viewer.flip_fault_state()
+        # if self.enable_passive_faults:
+        #     if random.randint(0, 1) == 1:
+        #         self.fault_map = self.fault_magnitude
+        #
+        #         if self.viewer:
+        #             self.viewer.flip_fault_state()
 
         # Return initial state
         return initial_state
