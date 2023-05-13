@@ -16,7 +16,7 @@ I have also integrated a continuous wind disturbance model that allows for a mor
 
 ### Example Files (Useful for UCL markers)
 
-The folder `example_files` contains a few examples of the different aspects of the project. Including the following files:
+The [folder](https://github.com/fidhalkotta/gym-copter-FTC/tree/master/example_files) `example_files` contains a few examples of the different aspects of the project. Including the following files:
 
 - `ModelB.2.py` - This is the custom OpenAI Gym environment that I have created. It is based on the `gym-copter` environment, but I have added my own fault model and wind model.
 - `trainModelB.2.py` - This is the file that trains the PPO model with StableBaselines3 integration, saving a model periodically.
