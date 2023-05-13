@@ -21,10 +21,9 @@ drl/archive
 drl/test
 
 drl/**/models/
-drl/**/logs
+drl/**/logs/
 
-*/models/
-*/logs/
+
 
 drl/**/cmaps/*
 
