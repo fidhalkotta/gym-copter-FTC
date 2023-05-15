@@ -10,7 +10,7 @@ OpenAI Gym environment for fault tolerant control of a quadcopter using Stable-B
 
 This repository contains all of the code for my 3rd Year MECH0020 project.
 This was built on top of an existing simulation environment made by Simon D. Levy called [gym-copter](https://github.com/simondlevy/gym-copter).
-The final report is also included in this repository [here.](https://github.com/fidhalkotta/gym-copter-FTC/blob/master/Fault_Tolerant_Quadcopter_Control_using_Reinforcement_Learning_V34.pdf)
+The final report is also included in this repository [here.](https://github.com/fidhalkotta/gym-copter-FTC/blob/master/Fault_Tolerant_Quadcopter_Control_using_Reinforcement_Learning_V35.pdf)
 
 I have extended the environment, by developing my own fault model, which allows for a loss of effectiveness to be simulated.
 I have integrated Stable-Baselines3 into this environment and used the reinforcement learning algorithm PPO to train the model to control the quadcopter in both the nominal case (no faults) and the faulty case (loss of effectiveness in one motor).
@@ -31,7 +31,7 @@ The [folder](https://github.com/fidhalkotta/gym-copter-FTC/tree/master/example_f
 
 ## Too short! I want to know more!
 
-I have attached the full report with all the methods and results in the repository [here.](https://github.com/fidhalkotta/gym-copter-FTC/blob/master/Fault_Tolerant_Quadcopter_Control_using_Reinforcement_Learning_V34.pdf)
+I have attached the full report with all the methods and results in the repository [here.](https://github.com/fidhalkotta/gym-copter-FTC/blob/master/Fault_Tolerant_Quadcopter_Control_using_Reinforcement_Learning_V35.pdf)
 
 
 ## Future Plans
